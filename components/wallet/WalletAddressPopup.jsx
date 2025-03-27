@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
-import {QRCodeSVG} from "qrcode.react";
+import { QRCodeSVG } from "qrcode.react";
 import { Copy, LogOut } from "lucide-react";
+import { WalletIcon } from "./WalletIcon";
 
-export const WalletAddressPopup = ({ address, onDisconnect, onClose }) => {
+export const WalletAddressPopup = ({ address, onDisconnect, onClose, walletName }) => {
   const [copied, setCopied] = useState(false);
 
   const copyAddress = () => {
@@ -21,7 +22,10 @@ export const WalletAddressPopup = ({ address, onDisconnect, onClose }) => {
       <div className="relative z-10 flex flex-col w-full max-w-[400px] overflow-hidden rounded-xl bg-[#121727] m-6 md:mt-10 md:mr-10">
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-medium text-white">Connected Wallet</h2>
+            <div className="flex items-center gap-2">
+              <WalletIcon walletName={walletName} className="w-6 h-6" />
+              <h2 className="text-lg font-medium text-white">Connected Wallet</h2>
+            </div>
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-white"
@@ -63,4 +67,4 @@ export const WalletAddressPopup = ({ address, onDisconnect, onClose }) => {
       </div>
     </div>
   );
-}
+};

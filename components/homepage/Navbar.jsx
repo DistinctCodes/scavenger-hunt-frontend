@@ -11,6 +11,7 @@ import { useCoinbaseWalletConnection } from "@/lib/useCoinbaseWalletConnection";
 import { Wallet } from "lucide-react";
 import { SelectWallet } from "../wallet/SelectWallet";
 import { WalletAddressPopup } from "../wallet/WalletAddressPopup";
+import { WalletIcon } from "../wallet/WalletIcon";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,6 +38,14 @@ const Navbar = () => {
 
   const connectedAddress = metaMaskAddress || trustAddress || coinbaseAddress;
   const isConnected = isMetaMaskConnected || isTrustConnected || isCoinbaseConnected;
+
+  // Determine which wallet is connected
+  const getConnectedWalletName = () => {
+    if (isMetaMaskConnected) return "Metamask";
+    if (isTrustConnected) return "Trust Wallet";
+    if (isCoinbaseConnected) return "Coinbase Wallet";
+    return null;
+  };
 
   // Effect to close wallet modal when connected
   useEffect(() => {
@@ -84,6 +93,8 @@ const Navbar = () => {
       );
     }
 
+    const connectedWalletName = getConnectedWalletName();
+
     return (
       <div className="flex items-center gap-3">
         {/* Main wallet button with address */}
@@ -92,16 +103,9 @@ const Navbar = () => {
           className="flex items-center gap-2 px-6 py-2 text-lg font-bold h-fit text-texts-important"
           onClick={() => setShowAddressPopup(true)}
         >
-          <Wallet className="w-5 h-5" />
           {formatAddress(connectedAddress)}
+          <WalletIcon walletName={connectedWalletName} className="w-5 h-5" />
         </Button>
-        {/* <Button
-          variant="gradient"
-          className="px-4 py-2 text-base font-medium h-fit text-texts-important flex items-center gap-2 border-[1px] border-solid border-[#E4489F4D] bg-transparent hover:bg-[#232338]"
-          onClick={() => setShowAddressPopup(true)}
-        >
-          
-        </Button> */}
       </div>
     );
   };
@@ -179,6 +183,7 @@ const Navbar = () => {
           address={connectedAddress}
           onDisconnect={handleDisconnect}
           onClose={() => setShowAddressPopup(false)}
+          walletName={getConnectedWalletName()}
         />
       )}
     </nav>
