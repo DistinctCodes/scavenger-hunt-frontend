@@ -68,7 +68,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="absolute left-0 flex flex-col items-center w-full p-6 space-y-4 bg-black top-16 bg-opacity-95 md:hidden">
+        <div className="absolute left-0 flex flex-col z-50 items-center w-full p-6 space-y-4 bg-black top-16 bg-opacity-95 md:hidden">
           <Link href="#" className="text-lg text-white hover:text-pink-500">
             Home
           </Link>
