@@ -5,7 +5,7 @@ const page = () => {
     <section>
     
 
-      <div></div>
+  
     </section>
   );
 };

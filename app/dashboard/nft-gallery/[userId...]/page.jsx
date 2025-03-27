@@ -2,32 +2,7 @@
 import NftCard from "@/components/dashboard/NftCard";
 import React, { useState } from "react";
 
-const listOfNft = [
-  {
-    nftImage: "/images/nft1.png",
-    nftName: "Nova Echo",
-    nftNumber: "#1324",
-    nftValue: "1.99ETH",
-  },
-  {
-    nftImage: "/images/nft2.png",
-    nftName: "Apex Eon",
-    nftNumber: "#029",
-    nftValue: "1.99ETH",
-  },
-  {
-    nftImage: "/images/nft3.png",
-    nftName: "Alpha Neon",
-    nftNumber: "#4673",
-    nftValue: "1.99ETH",
-  },
-  {
-    nftImage: "/images/nft4.png",
-    nftName: "Goat Man",
-    nftNumber: "3643",
-    nftValue: "1.99ETH",
-  },
-];
+
 
 const NftCardGallery = () => {
   const [hasNFTs, setHasNFTs] = useState(true);
@@ -72,15 +47,7 @@ const NftCardGallery = () => {
         } justify-center lg:w-11/12 pt-12 `}
       >
         {hasNFTs ? (
-          listOfNft.map(({ nftImage, nftName, nftNumber, nftValue }) => (
-            <NftCard
-              key={nftNumber}
-              nftImage={nftImage}
-              nftName={nftName}
-              nftNumber={nftNumber}
-              nftValue={nftValue}
-            />
-          ))
+          <p>List of cards</p>
         ) : (
           <div className="h-screen flex flex-col justify-items-start items-center gap-y-8 text-[#BFBFBF]">
             <h1 className="font-orbitron text-xl">Good to have you here!!</h1>
