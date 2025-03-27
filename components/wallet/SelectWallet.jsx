@@ -5,17 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { EnterWalletPassword } from "./EnterWalletPassword";
 
-export function SelectWallet({ onClose }) {
+export const SelectWallet = ({ onClose }) => {
   const [selectedWallet, setSelectedWallet] = useState(null);
 
   const wallets = [
     {
-      id: "metamask1",
+      id: "metamask",
       name: "Metamask",
       icon: "/images/metamask-icon.svg",
     },
     {
-      id: "trust1",
+      id: "trust",
       name: "Trust Wallet",
       icon: "/images/trust-wallet-icon.svg",
     },
@@ -23,11 +23,6 @@ export function SelectWallet({ onClose }) {
       id: "coinbase",
       name: "Coinbase Wallet",
       icon: "/images/coinbase-icon.svg",
-    },
-    {
-      id: "metamask2",
-      name: "Metamask",
-      icon: "/images/metamask-icon.svg",
     },
   ];
 
@@ -127,4 +122,4 @@ export function SelectWallet({ onClose }) {
       </div>
     </div>
   );
-}
+};
