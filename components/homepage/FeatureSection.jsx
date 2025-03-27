@@ -117,7 +117,7 @@ const FeatureSection = () => {
                 fun and rewarding
               </span>
             </h2>
-            <h4 class="text-center lg:w-full sm:w-10  mb-5 md:text-[#858894] font-spaceGrotesk md:flex md:flex-col md:items-center mt-3   ">
+            <h4 className="text-center lg:w-full sm:w-10  mb-5 md:text-[#858894] font-spaceGrotesk md:flex md:flex-col md:items-center mt-3   ">
 
               Embark on digital treasure hunt  and claim your NFT <br className='lg:hidden' /> rewards
             </h4>
