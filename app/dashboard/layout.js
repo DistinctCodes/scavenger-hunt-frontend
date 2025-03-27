@@ -1,8 +1,9 @@
 import "../globals.css";
 import { Sidebar } from "@/components/dashboard/Sidebar";
-import { Navbar } from "@/components/dashboard/Navbar";
+import Navbar from "@/components/dashboard/Navbar";
 
 export const metadata = {
+
   title: "Scavenger Hunt",
   description: "Learn about the countless blockchain ecosystems",
 };
@@ -20,4 +21,5 @@ export default function DashboardLayout({ children }) {
       </div>
     </main>
   );
+
 }
