@@ -1,30 +1,18 @@
 import Image from "next/image";
 import React from "react";
 
-interface NftCollectionCardProps {
-  nftImage: any;
-  nftName: string;
-  nftNumber: string;
-  nftValue: number | string;
-}
-
-const NftCollectionCard: React.FC<NftCollectionCardProps> = ({
-  nftImage,
-  nftName,
-  nftNumber,
-  nftValue,
-}) => {
+const NftCollectionCard = ({ nftImage, nftName, nftNumber, nftValue }) => {
   return (
-    <div className="w-[300px] px-2  mx-auto  md:w-56 overflow-hidden shadow-lg relative cursor-pointer group">
+    <div className="w-[300px] px-2 mx-auto md:w-56 overflow-hidden shadow-lg relative cursor-pointer group">
       <div className="relative w-full h-[333px] md:h-64 overflow-hidden rounded-[17%] ">
         {/* NFT Image */}
-        <div className="hover-scale  h-[72%] md:h-[64%] overflow-hidden">
+        <div className="hover-scale h-[72%] md:h-[64%] overflow-hidden">
           <Image
             src={nftImage}
             alt={`${nftName} NFT`}
             width={300}
             height={250}
-            className=" opacity-70 imgNft  w-full object-cover object-top"
+            className="opacity-70 imgNft w-full object-cover object-top"
           />
         </div>
 

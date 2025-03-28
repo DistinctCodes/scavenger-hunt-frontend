@@ -1,12 +1,11 @@
-"use client";
 import React, { useState } from "react";
-import nftOne from "@/public/assets/nfts/nftOneRz.png";
-import nftTwo from "@/public/assets/nfts/nftTwoRz.png";
-import nftThree from "@/public/assets/nfts/nftThreRz.png";
-import nftFour from "@/public/assets/nfts/nftFour.png";
-import nftFive from "@/public/assets/nfts/nftFive.png";
-import nftSix from "@/public/assets/nfts/nftSix.png";
-import NftCollectionCard from "@/components/dashboard/NftCollectionCard";
+import nftOne from "../../../public/assets/nfts/nftOneRz.png";
+import nftTwo from "../../../public/assets/nfts/nftTwoRz.png";
+import nftThree from "../../../public/assets/nfts/nftThreRz.png";
+import nftFour from "../../../public/assets/nfts/nftFour.png";
+import nftFive from "../../../public/assets/nfts/nftFive.png";
+import nftSix from "../../../public/assets/nfts/nftSix.png";
+import NftCollectionCard from "../../../components/dashboard/NftCollectionCard";
 
 const NftCardGallery = () => {
   const [hasNFTs, setHasNFTs] = useState(true);
