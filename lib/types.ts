@@ -1,10 +1,22 @@
+/**
+	* @description      : 
+	* @author           : 
+	* @group            : 
+	* @created          : 28/03/2025 - 11:13:35
+	* 
+	* MODIFICATION LOG
+	* - Version         : 1.0.0
+	* - Date            : 28/03/2025
+	* - Author          : 
+	* - Modification    : 
+**/
 export interface User {
 	id: string;
 	name: string;
 	avatar: string;
 	level: string;
 	stats: {
-		gamesPlayed: string | number;
+		gamesCompleted: string | number;
 		nftCollected: string | number;
 		ecoSystem: string | number;
 	};
@@ -29,4 +41,21 @@ export interface Challenge {
 	time: string;
 	players: string;
 	reward: string;
+}
+
+export interface Challenges {
+	id: string;
+	title: string;
+	description: string;
+	image: string;
+	category: string;
+	difficulty: string;
+	
+}
+
+export interface ecosystems {
+	title: string;
+	description: string;
+	image: string;
+
 }
