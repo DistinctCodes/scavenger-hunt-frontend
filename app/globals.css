@@ -24,41 +24,45 @@ body {
 } */
 
 @layer base {
-    :root {
-      --background: 260 25% 10%;
-      --foreground: 0 0% 98%;
-      --primary: 280 75% 60%;
-      --primary-foreground: 0 0% 98%;
-      --secondary: 180 100% 50%;
-      --secondary-foreground: 0 0% 98%;
-      --accent: 320 100% 70%;
-      --accent-foreground: 0 0% 98%;
-      --muted: 260 20% 20%;
-      --muted-foreground: 260 10% 70%;
-      --border: 260 20% 20%;
-      --radius: 0.5rem;
-      --sidebarbg : #7D3EAF33;
-      --borderColor: #A855F7;
-    }
+  :root {
+    --background: 260 25% 10%;
+    --foreground: 0 0% 98%;
+    --primary: 280 75% 60%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 180 100% 50%;
+    --secondary-foreground: 0 0% 98%;
+    --accent: 320 100% 70%;
+    --accent-foreground: 0 0% 98%;
+    --muted: 260 20% 20%;
+    --muted-foreground: 260 10% 70%;
+    --border: 260 20% 20%;
+    --radius: 0.5rem;
+    --sidebarbg: #7d3eaf33;
+    --borderColor: #a855f7;
   }
-  
-  body {
-    background-image: radial-gradient(ellipse at top right, hsl(280, 75%, 20%), transparent 70%);
-    background-size: 100% 100%;
-    background-attachment: fixed;
-  }
-  
-  .sidebar-item {
-    @apply flex items-center gap-3 px-4 py-3 text-muted-foreground hover:text-primary-foreground transition-colors rounded-md;
-  }
-  
-  .sidebar-item.active {
-    @apply bg-sidebarBg text-primary-foreground border-l-4 border-borderColor;
-  }
-  
-  .sidebar-icon {
-    @apply w-5 h-5;
-  }
+}
+
+body {
+  background-image: radial-gradient(
+    ellipse at top right,
+    hsl(280, 75%, 20%),
+    transparent 70%
+  );
+  background-size: 100% 100%;
+  background-attachment: fixed;
+}
+
+.sidebar-item {
+  @apply flex items-center gap-3 px-4 py-3 text-muted-foreground hover:text-primary-foreground transition-colors rounded-md;
+}
+
+.sidebar-item.active {
+  @apply bg-sidebarBg text-primary-foreground border-l-4 border-borderColor;
+}
+
+.sidebar-icon {
+  @apply w-5 h-5;
+}
 
 @font-face {
   font-family: "Orbitron";
@@ -78,7 +82,6 @@ body {
 .space-grotesk {
   font-family: "Space Grotesk", sans-serif;
 }
-
 
 /* 
 @font-face {
@@ -108,3 +111,71 @@ body {
     font-weight: bold;
     font-style: normal;
 } */
+
+/* Hover scale effect with smooth transition */
+.hover-scale {
+  transition: transform 0.3s ease-in-out;
+  overflow: hidden;
+}
+
+.imgNft {
+  transition: transform 0.3s ease-in-out;
+}
+
+.imgNft:hover {
+  transform: scale(1.3); /* Adjust the scale factor as needed */
+}
+
+/* Alternative class with different scale and opacity effects */
+.hover-zoom {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-zoom img {
+  transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+.hover-zoom:hover img {
+  transform: scale(1.15);
+  opacity: 0.9;
+}
+
+/* Base animation keyframes */
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Card InView Animation */
+.card-inview {
+  opacity: 0;
+  transform: translateY(50px);
+  animation: slideUpFade 0.8s ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+/* Alternative Softer Animation */
+@keyframes softSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-inview-soft {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: softSlideUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-delay: var(--delay, 0s);
+}
