@@ -1,3 +1,15 @@
+/**
+    * @description      : 
+    * @author           : 
+    * @group            : 
+    * @created          : 28/03/2025 - 11:46:49
+    * 
+    * MODIFICATION LOG
+    * - Version         : 1.0.0
+    * - Date            : 28/03/2025
+    * - Author          : 
+    * - Modification    : 
+**/
 import Image from "next/image";
 import clockIcon from "@/public/images/time-icon.svg";
 import trophyIcon from "@/public/images/trophy-icon.svg";
@@ -65,9 +77,8 @@ const ChallengeCard = ({
                     bigCard && "lg:text-[14px] w-auto"
                   }`}
                 >
-                  {`${description.slice(0, 70)}${
-                    description.length > 70 ? "..." : ""
-                  }`}
+                 {description ? `${description.slice(0, 70)}${description.length > 70 ? "..." : ""}` : "No description available"}
+
                 </p>
               </div>
               <section className="w-full flex items-center justify-between mt-[14px] -bottom-3 relative">

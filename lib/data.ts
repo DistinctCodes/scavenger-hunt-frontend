@@ -1,12 +1,27 @@
-import type { User, OnboardingStep, Challenge } from "./types";
+/**
+    * @description      : 
+    * @author           : 
+    * @group            : 
+    * @created          : 28/03/2025 - 10:19:06
+    * 
+    * MODIFICATION LOG
+    * - Version         : 1.0.0
+    * - Date            : 28/03/2025
+    * - Author          : 
+    * - Modification    : 
+**/
+import type { User, OnboardingStep, Challenge, ecosystems, Challenges } from "./types";
 import image1 from "@/public/images/futuristic-dj-using-virtual-reality-glasses-headline-party-play-music 2.svg";
+import StarknetLogo from "@/public/ecosystems/Starknet_Symbol.png";
+import WorldcoinLogo from "@/public/ecosystems/Worldcoin_Symbol.png";
+
 export const userProfile: User = {
 	id: "#2355414",
 	name: "Jendor Glowe",
 	avatar: "/placeholder.svg?height=96&width=96",
 	level: "Newbie",
 	stats: {
-		gamesPlayed: "0",
+		gamesCompleted: "0/3",
 		nftCollected: "0",
 		ecoSystem: "0",
 	},
@@ -91,5 +106,52 @@ export const activeChallenges: Challenge[] = [
 		time: "20.4H 10H",
 		players: "10 players",
 		reward: "Rare NFT",
+	},
+];
+
+export const myEcosystems : ecosystems[] = [
+	{
+	  title: "Worldcoin",
+	  description:
+		"Explore Worldcoin's ecosystem and discover groundbreaking projects.",
+	  image: WorldcoinLogo,
+	},
+	
+	{
+	  title: "Stellar",
+	  description:
+		"Build cross-border payment solutions with Stellar's blockchain network.",
+	  image: StarknetLogo, 
+	},
+	
+  ];
+
+  export const ongoingChallenges: Challenges[] = [
+	{
+		
+		id: "1",
+		title: "The Cryptic Key",
+		description: "Decode the ancient StarkNet runes to unlock the hidden vault.",
+		image: "/images/challenge1.png",
+		category: "Stellar",
+		difficulty: "Easy",
+	},
+	{
+		
+		id: "2",
+		title: "The Zone of No Return",
+		description: "Decode the ancient StarkNet runes to unlock the hidden vault.",
+		image: "/images/challenge2.png",
+		category: "Stellar",
+		difficulty: "Hard",
+	},
+	{
+		
+		id: "3",
+		title: "Coin the Basis of Value",
+		description: "Decode the ancient StarkNet runes to unlock the hidden vault.",
+		image: "/images/challenge3.png",
+		category: "Worldcoin",
+		difficulty: "Medium",
 	},
 ];
