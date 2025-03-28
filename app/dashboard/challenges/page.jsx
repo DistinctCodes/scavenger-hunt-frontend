@@ -1,13 +1,31 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import ChallengeCard from "@/components/challenges/ChallengeCard"; 
+import ChallengeCard from "@/components/challenges/ChallengeCard";
+import ChallengesSection from "@/components/challenges/ChallengeSection";
+import ChallengeMainCard from "@/components/challenges/ChallengeMainCard";
+import { dummyChallenges, dummyCompletedChallenges } from "@/lib/mockdata";
+import OnGoingChallenges from "@/components/challenges/OnGoingChallengesContainer";
+import CompleteChallenges from "@/components/challenges/CompleteChallenges";
+import Button from "@/components/ui/Button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const page = () => {
   const [activeTab, setActiveTab] = useState("All");
   const [filteredChallenges, setFilteredChallenges] = useState([]);
+  const [isReturningUser, setIsReturningUser] = useState(true);
 
   const tabs = ["All", "Stellar", "starknet", "Web3", "Worldcoin"];
+  const [api, setApi] = useState()
+  const [current, setCurrent] = useState(0)
+  const [count, setCount] = useState(0)
+  const [autoplay, setAutoplay] = useState(null)
+
 
   const challenges = [
     {
@@ -98,9 +116,80 @@ const page = () => {
     }
   }, [activeTab]);
 
+ // Check if we're on mobile view
+ const isMobile = useMediaQuery("(max-width: 768px)")
+
+ // Set up autoplay for mobile
+ useEffect(() => {
+   if (!api || !isMobile) {
+     // Clear any existing autoplay if we're not on mobile
+     if (autoplay) {
+       clearInterval(autoplay)
+       setAutoplay(null)
+     }
+     return
+   }
+
+   // Set up autoplay for mobile
+   const interval = setInterval(() => {
+     if (api.canScrollNext()) {
+       api.scrollNext()
+     } else {
+       api.scrollTo(0) // Return to first slide when reaching the end
+     }
+   }, 3000) // Change slide every 3 seconds
+
+   setAutoplay(interval)
+
+   // Clean up interval on unmount
+   return () => {
+     clearInterval(interval)
+   }
+ }, [api, isMobile])
+
+ // Handle pause on user interaction
+ const handleUserInteraction = () => {
+   // Pause autoplay when user interacts with carousel
+   if (autoplay) {
+     clearInterval(autoplay)
+
+     // Resume after 5 seconds of inactivity
+     const timeout = setTimeout(() => {
+       if (isMobile && api) {
+         const newInterval = setInterval(() => {
+           if (api.canScrollNext()) {
+             api.scrollNext()
+           } else {
+             api.scrollTo(0)
+           }
+         }, 3000)
+         setAutoplay(newInterval)
+       }
+     }, 5000)
+
+     return () => clearTimeout(timeout)
+   }
+ }
+
+ useEffect(() => {
+   if (!api) {
+     return
+   }
+
+   setCount(api.scrollSnapList().length)
+   setCurrent(api.selectedScrollSnap())
+
+   api.on("select", () => {
+     setCurrent(api.selectedScrollSnap())
+   })
+ }, [api])
+
+ const handleDotClick = (index) => {
+   api?.scrollTo(index)
+   handleUserInteraction()
+ }
   return (
     <div className="w-full h-full mx-auto pt-4 relative overflow-y-auto">
-
       <div className="relative z-10 px-4 md:px-8 lg:px-12 pb-16">
         <div className="mb-10 w-full relative rounded-lg overflow-hidden md:h-[16rem] h-[11.25rem] md:p-[2.5rem] p-4 opacity-90">
           <Image
@@ -121,6 +210,94 @@ const page = () => {
             and rewards waiting for you.
           </p>
         </div>
+        {isReturningUser && (
+
+        <section className=" md:h-[421px] w-full flex md:flex-row flex-col items-center md:justify-between  md:mt-24 mb-4">
+          <main className=" border md:mb-0 mb-[12rem] border-[#121727] rounded-[30px] w-[576px] h-[389px] flex justify-center py-4 ">
+            <div className="w-[510px]  flex flex-col space-y-5 h-full">
+              <h2 className="text-center font-orbitron font-semibold text-[20px]">
+                My Ongoing Challenges
+              </h2>
+              <Carousel
+                setApi={setApi}
+                opts={{
+                  align: "start",
+                  loop: true,
+                  slidesToScroll: 1,
+                }}
+                className="w-full h-full"
+                onMouseEnter={handleUserInteraction}
+                onTouchStart={handleUserInteraction}
+              >
+                <CarouselContent className="-ml-4 h-full">
+                  {dummyChallenges.map((challenge, index) => (
+                    <CarouselItem
+                      key={index}
+                      className="pl-4 basis-1/2 md:basis-1/2"
+                    >
+                      <OnGoingChallenges {...challenge} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+
+              <main className="flex justify-center w-full">
+                <div className="flex space-x-4">
+                  {/* Show 3 dots for navigation */}
+                  {[0, 1, 2,3].map((index) => (
+                    <Button
+                      key={index}
+                      variant="ghost"
+                      size="icon"
+                      className={`w-4 h-4 p-0 rounded-full ${
+                        index === current % 3
+                          ? "bg-[#3B82F6]"
+                          : "bg-[#3B82F680]"
+                      }`}
+                      onClick={() => handleDotClick(index)}
+                    >
+                      <span className="sr-only">Go to slide {index + 1}</span>
+                    </Button>
+                  ))}
+                </div>
+              </main>
+            </div>
+          </main>
+          <main className="bg-white bg-opacity-5 rounded-[20px] h-full md:w-[406px] w-full flex flex-col space-y-5 py-4">
+            <h2 className="text-center font-orbitron font-semibold text-[20px]">
+              My completed challenges
+            </h2>
+            <div className="flex items-center flex-col gap-2">
+              {dummyCompletedChallenges.map((challenge, index) => (
+                <CompleteChallenges key={index} {...challenge} />
+              ))}
+            </div>
+            <div className="flex justify-end items-center mt-4 pr-6 gap-2">
+              <button className="bg-[#060B1C] rounded-[6px] size-[26px] rotat">
+                <Image
+                  src="/images/arrow-right-icon.svg"
+                  alt="card-arrow"
+                  width={12}
+                  height={12}
+                  className="m-auto rotate-180"
+                />
+              </button>
+              <p className="text-semibold text-[12px] font-orbitron">
+                1 - 3 0f 3
+              </p>
+              <button className="bg-[#060B1C] rounded-[6px] size-[26px]">
+                <Image
+                  src="/images/arrow-right-icon.svg"
+                  alt="card-arrow"
+                  width={12}
+                  height={12}
+                  className="m-auto"
+                />
+              </button>
+            </div>
+          </main>
+        </section>
+        )}
 
         <div className="flex justify-center font-orbitron w-full md:mt-24 mb-4">
           <div

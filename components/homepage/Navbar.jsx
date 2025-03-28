@@ -1,14 +1,58 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { SelectWallet } from "../wallet/SelectWallet";
+
 import Button from "../ui/Button";
+import { useMetaMaskConnection } from "@/lib/useMetaMaskConnection";
+import { useTrustWalletConnection } from "@/lib/useTrustWalletConnection";
+import { useCoinbaseWalletConnection } from "@/lib/useCoinbaseWalletConnection";
+import { Wallet } from "lucide-react";
+import { SelectWallet } from "../wallet/SelectWallet";
+import { WalletAddressPopup } from "../wallet/WalletAddressPopup";
+import { WalletIcon } from "../wallet/WalletIcon";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showWalletModal, setShowWalletModal] = useState(false);
+  const [showAddressPopup, setShowAddressPopup] = useState(false);
+
+  const { 
+    address: metaMaskAddress, 
+    isConnected: isMetaMaskConnected,
+    disconnectWallet: disconnectMetaMask 
+  } = useMetaMaskConnection();
+
+  const {
+    address: trustAddress,
+    isConnected: isTrustConnected,
+    disconnectWallet: disconnectTrust
+  } = useTrustWalletConnection();
+
+  const {
+    address: coinbaseAddress,
+    isConnected: isCoinbaseConnected,
+    disconnectWallet: disconnectCoinbase
+  } = useCoinbaseWalletConnection();
+
+  const connectedAddress = metaMaskAddress || trustAddress || coinbaseAddress;
+  const isConnected = isMetaMaskConnected || isTrustConnected || isCoinbaseConnected;
+
+  // Determine which wallet is connected
+  const getConnectedWalletName = () => {
+    if (isMetaMaskConnected) return "Metamask";
+    if (isTrustConnected) return "Trust Wallet";
+    if (isCoinbaseConnected) return "Coinbase Wallet";
+    return null;
+  };
+
+  // Effect to close wallet modal when connected
+  useEffect(() => {
+    if (isConnected) {
+      setShowWalletModal(false);
+    }
+  }, [isConnected]);
 
   const handleConnectWallet = () => {
     setShowWalletModal(true);
@@ -16,6 +60,54 @@ const Navbar = () => {
 
   const handleCloseModal = () => {
     setShowWalletModal(false);
+  };
+
+  const handleDisconnect = async () => {
+    if (isMetaMaskConnected) {
+      await disconnectMetaMask();
+    }
+    if (isTrustConnected) {
+      await disconnectTrust();
+    }
+    if (isCoinbaseConnected) {
+      await disconnectCoinbase();
+    }
+    setShowAddressPopup(false);
+  };
+
+  const formatAddress = (address) => {
+    if (!address) return "";
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
+
+  const WalletButton = () => {
+    if (!isConnected) {
+      return (
+        <Button
+          variant="gradient"
+          className="px-6 py-2 text-lg font-bold h-fit text-texts-important"
+          onClick={handleConnectWallet}
+        >
+          Connect Wallet
+        </Button>
+      );
+    }
+
+    const connectedWalletName = getConnectedWalletName();
+
+    return (
+      <div className="flex items-center gap-3">
+        {/* Main wallet button with address */}
+        <Button
+          variant="gradient"
+          className="flex items-center gap-2 px-6 py-2 text-lg font-bold h-fit text-texts-important"
+          onClick={() => setShowAddressPopup(true)}
+        >
+          {formatAddress(connectedAddress)}
+          <WalletIcon walletName={connectedWalletName} className="w-5 h-5" />
+        </Button>
+      </div>
+    );
   };
 
   return (
@@ -44,17 +136,11 @@ const Navbar = () => {
         <div className="flex items-center space-x-5">
           <Link
             href="#"
-            className="bg-[#FD7DFF1A] flex justify-center font-orbitron font-bold py-2 rounded-lg mr-4 hover:text-pink-500 px-9 "
+            className="bg-[#FD7DFF1A] flex justify-center font-orbitron font-bold py-2 rounded-lg mr-4 hover:text-pink-500 px-9"
           >
             Sign In
           </Link>
-          <Button
-            variant="gradient"
-            className="px-6 py-2 text-lg font-bold h-fit text-texts-important"
-            onClick={handleConnectWallet}
-          >
-            Connect Wallet
-          </Button>
+          <WalletButton />
         </div>
       </div>
 
@@ -68,7 +154,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="absolute left-0 flex flex-col items-center w-full p-6 space-y-4 bg-black top-16 bg-opacity-95 md:hidden">
+        <div className="absolute left-0 flex flex-col z-50 items-center w-full p-6 space-y-4 bg-black top-16 bg-opacity-95 md:hidden">
           <Link href="#" className="text-lg text-white hover:text-pink-500">
             Home
           </Link>
@@ -84,20 +170,24 @@ const Navbar = () => {
           >
             Sign In
           </Link>
-          <Button
-            variant="gradient"
-            className="px-5 py-2 text-lg font-medium h-fit font-orbitron text-texts-important"
-            onClick={handleConnectWallet}
-          >
-            Connect Wallet
-          </Button>
+          <WalletButton />
         </div>
       )}
 
       {/* Wallet Modal */}
       {showWalletModal && <SelectWallet onClose={handleCloseModal} />}
+
+      {/* Wallet Address Popup */}
+      {showAddressPopup && connectedAddress && (
+        <WalletAddressPopup
+          address={connectedAddress}
+          onDisconnect={handleDisconnect}
+          onClose={() => setShowAddressPopup(false)}
+          walletName={getConnectedWalletName()}
+        />
+      )}
     </nav>
   );
-};
+}
 
 export default Navbar;

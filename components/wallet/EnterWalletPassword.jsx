@@ -1,17 +1,33 @@
 "use client";
 import { useTrustWalletConnection } from "@/lib/useTrustWalletConnection";
+import { useMetaMaskConnection } from "@/lib/useMetaMaskConnection";
+import { useCoinbaseWalletConnection } from "@/lib/useCoinbaseWalletConnection";
 import { CircleArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useState, useEffect } from "react";
 
-export function EnterWalletPassword({ wallet, onBack, onClose }) {
+export const EnterWalletPassword = ({ wallet, onBack, onClose }) => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { 
     connectTrustWallet, 
-    isConnected, 
-    error, 
-    isLoading 
+    isConnected: isTrustConnected, 
+    error: trustError, 
+    isLoading: isTrustLoading 
   } = useTrustWalletConnection();
+
+  const {
+    connectMetaMask,
+    isConnected: isMetaMaskConnected,
+    error: metaMaskError,
+    isLoading: isMetaMaskLoading
+  } = useMetaMaskConnection();
+
+  const {
+    connectCoinbaseWallet,
+    isConnected: isCoinbaseConnected,
+    error: coinbaseError,
+    isLoading: isCoinbaseLoading
+  } = useCoinbaseWalletConnection();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -24,28 +40,47 @@ export function EnterWalletPassword({ wallet, onBack, onClose }) {
   const handleUnlock = async () => {
     console.log(`Attempting to unlock ${wallet.name}`);
     
-    if (wallet.name === "Trust Wallet") {
-      try {
-        const connectedAddress = await connectTrustWallet();
-        
-        if (connectedAddress) {
-          console.log('Wallet successfully connected');
-          onClose();
-        }
-      } catch (connectionError) {
-        console.error('Connection failed', connectionError);
+    try {
+      let connectedAddress;
+      
+      switch(wallet.name) {
+        case "Metamask":
+          console.log('Connecting to MetaMask...');
+          connectedAddress = await connectMetaMask();
+          break;
+        case "Trust Wallet":
+          console.log('Connecting to Trust Wallet...');
+          connectedAddress = await connectTrustWallet();
+          break;
+        case "Coinbase Wallet":
+          console.log('Connecting to Coinbase Wallet...');
+          connectedAddress = await connectCoinbaseWallet();
+          break;
+        default:
+          console.error('Unknown wallet type');
+          return;
       }
-    } else {
-      // For other wallets, implement specific connection logic
-      console.log('Connection not implemented for this wallet');
+
+      if (connectedAddress) {
+        console.log('Wallet successfully connected:', connectedAddress);
+        onClose(); // Close the modal after successful connection
+      } else {
+        console.error('No address returned from connection');
+      }
+    } catch (error) {
+      console.error('Connection failed:', error);
     }
   };
 
+  // Close modal when connection is successful
   useEffect(() => {
-    if (isConnected) {
+    if (isTrustConnected || isMetaMaskConnected || isCoinbaseConnected) {
       onClose();
     }
-  }, [isConnected, onClose]);
+  }, [isTrustConnected, isMetaMaskConnected, isCoinbaseConnected, onClose]);
+
+  const isLoading = isTrustLoading || isMetaMaskLoading || isCoinbaseLoading;
+  const error = trustError || metaMaskError || coinbaseError;
 
   return (
     <div className="flex h-full flex-col rounded-xl bg-[#060B1C] border border-[#FFFFFF33] pb-6 mb-6">
@@ -64,53 +99,20 @@ export function EnterWalletPassword({ wallet, onBack, onClose }) {
         )}
         <h3 className="mb-2 text-sm font-medium text-white">{wallet.name}</h3>
         <p className="mb-6 text-gray-400 font-normal text-xs">
-          {wallet.name === "Trust Wallet" 
-            ? "Click 'Unlock Wallet' to connect Trust Wallet" 
-            : "Input your password to connect"}
+          Click 'Connect {wallet.name}' to connect
         </p>
         
-        {wallet.name === "Trust Wallet" ? (
-          <button
-            onClick={handleUnlock}
-            disabled={isLoading}
-            className={`mx-auto w-fit py-2 px-8 rounded-xl ${
-              isLoading 
-                ? "bg-gray-500 cursor-not-allowed" 
-                : "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
-            } text-sm font-medium text-white`}
-          >
-            {isLoading ? "Connecting..." : "Unlock Wallet"}
-          </button>
-        ) : (
-          <>
-            <div className="relative w-full">
-              <input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={handlePasswordChange}
-                className="h-10 w-full rounded-lg bg-[#1A1A2F] px-4 text-white placeholder-gray-500 text-sm placeholder:text-sm outline-none focus:ring-purple-500 focus:ring-1 border-none"
-                placeholder="Enter your password"
-              />
-              <button
-                type="button"
-                onClick={togglePasswordVisibility}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400"
-              >
-                {showPassword ? (
-                  <Eye className="w-6 h-6" />
-                ) : (
-                  <EyeOff className="w-6 h-6" />
-                )}
-              </button>
-            </div>
-            <button
-              onClick={handleUnlock}
-              className="mx-auto w-fit py-2 px-8 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-sm font-medium text-white hover:from-purple-600 hover:to-pink-600"
-            >
-              Unlock Wallet
-            </button>
-          </>
-        )}
+        <button
+          onClick={handleUnlock}
+          disabled={isLoading}
+          className={`mx-auto w-fit py-2 px-8 rounded-xl ${
+            isLoading 
+              ? "bg-gray-500 cursor-not-allowed" 
+              : "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+          } text-sm font-medium text-white`}
+        >
+          {isLoading ? "Connecting..." : `Connect ${wallet.name}`}
+        </button>
 
         {error && (
           <p className="text-red-500 text-xs mt-4 text-center">{error}</p>
@@ -118,4 +120,4 @@ export function EnterWalletPassword({ wallet, onBack, onClose }) {
       </div>
     </div>
   );
-}
+};
