@@ -18,26 +18,27 @@ const Navbar = () => {
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showAddressPopup, setShowAddressPopup] = useState(false);
 
-  const { 
-    address: metaMaskAddress, 
+  const {
+    address: metaMaskAddress,
     isConnected: isMetaMaskConnected,
-    disconnectWallet: disconnectMetaMask 
+    disconnectWallet: disconnectMetaMask,
   } = useMetaMaskConnection();
 
   const {
     address: trustAddress,
     isConnected: isTrustConnected,
-    disconnectWallet: disconnectTrust
+    disconnectWallet: disconnectTrust,
   } = useTrustWalletConnection();
 
   const {
     address: coinbaseAddress,
     isConnected: isCoinbaseConnected,
-    disconnectWallet: disconnectCoinbase
+    disconnectWallet: disconnectCoinbase,
   } = useCoinbaseWalletConnection();
 
   const connectedAddress = metaMaskAddress || trustAddress || coinbaseAddress;
-  const isConnected = isMetaMaskConnected || isTrustConnected || isCoinbaseConnected;
+  const isConnected =
+    isMetaMaskConnected || isTrustConnected || isCoinbaseConnected;
 
   // Determine which wallet is connected
   const getConnectedWalletName = () => {
@@ -124,25 +125,61 @@ const Navbar = () => {
 
       {/* Desktop Menu */}
       <div className="items-center hidden space-x-12 text-lg text-texts-important font-spaceGrotesk md:flex">
-        <Link href="/" className="font-medium hover:text-pink-500">
-          Home
+        <Link 
+          href="/" 
+          className="font-medium relative group overflow-hidden"
+        >
+          <span className="relative z-10 transition-colors duration-300 group-hover:text-[#e3489f]">Home</span>
+          <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#e3489f] transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
         </Link>
-        <Link href="/about-us" className="font-medium hover:text-pink-500">
-          About Us
+        <Link 
+          href="/about-us" 
+          className="font-medium relative group overflow-hidden"
+        >
+          <span className="relative z-10 transition-colors duration-300 group-hover:text-[#e3489f]">About Us</span>
+          <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#e3489f] transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
         </Link>
-        <Link href="/contact-us" className="font-medium hover:text-pink-500">
-          Contact Us
+        <Link 
+          href="/contact-us" 
+          className="font-medium relative group overflow-hidden"
+        >
+          <span className="relative z-10 transition-colors duration-300 group-hover:text-[#e3489f]">Contact Us</span>
+          <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#e3489f] transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
         </Link>
         <div className="flex items-center space-x-5">
           <Link
             href="#"
-            className="bg-[#FD7DFF1A] flex justify-center font-orbitron font-bold py-2 rounded-lg mr-4 hover:text-pink-500 px-9"
+            className="bg-[#FD7DFF1A] flex justify-center font-orbitron font-bold py-2 rounded-lg mr-4 px-9 relative group overflow-hidden transition-all duration-300 hover:shadow-[0_0_15px_rgba(227,72,159,0.3)]"
           >
-            Sign In
+            <span className="relative z-10 transition-colors duration-300 group-hover:text-[#e3489f]">Sign In</span>
+            <span className="absolute inset-0 bg-gradient-to-r from-[#e3489f]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
           </Link>
           <WalletButton />
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="absolute left-0 flex flex-col z-50 items-center w-full p-6 space-y-4 bg-black top-16 bg-opacity-95 md:hidden">
+          <Link href="#" className="text-lg text-white relative group overflow-hidden">
+            <span className="relative z-10 transition-colors duration-300 group-hover:text-[#e3489f]">Home</span>
+            <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#e3489f] transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
+          </Link>
+          <Link href="#" className="text-lg text-white relative group overflow-hidden">
+            <span className="relative z-10 transition-colors duration-300 group-hover:text-[#e3489f]">About Us</span>
+            <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#e3489f] transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
+          </Link>
+          <Link href="#" className="text-lg text-white relative group overflow-hidden">
+            <span className="relative z-10 transition-colors duration-300 group-hover:text-[#e3489f]">Contact Us</span>
+            <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#e3489f] transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
+          </Link>
+          <Link href="/sign-in" className="text-lg text-white relative group overflow-hidden">
+            <span className="relative z-10 transition-colors duration-300 group-hover:text-[#e3489f]">Sign In</span>
+            <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#e3489f] transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
+          </Link>
+          <WalletButton />
+        </div>
+      )}
 
       {/* Mobile Menu Button */}
       <button
@@ -155,20 +192,41 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="absolute left-0 flex flex-col z-50 items-center w-full p-6 space-y-4 bg-black top-16 bg-opacity-95 md:hidden">
-          <Link href="#" className="text-lg text-white hover:text-pink-500">
-            Home
+          <Link
+            href="#"
+            className="text-lg text-white relative group overflow-hidden"
+          >
+            <span className="relative z-10 transition-colors duration-300 group-hover:text-[#e3489f]">
+              Home
+            </span>
+            <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#e3489f] transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
           </Link>
-          <Link href="#" className="text-lg text-white hover:text-pink-500">
-            About Us
+          <Link
+            href="#"
+            className="text-lg text-white relative group overflow-hidden"
+          >
+            <span className="relative z-10 transition-colors duration-300 group-hover:text-[#e3489f]">
+              About Us
+            </span>
+            <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#e3489f] transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
           </Link>
-          <Link href="#" className="text-lg text-white hover:text-pink-500">
-            Contact Us
+          <Link
+            href="#"
+            className="text-lg text-white relative group overflow-hidden"
+          >
+            <span className="relative z-10 transition-colors duration-300 group-hover:text-[#e3489f]">
+              Contact Us
+            </span>
+            <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#e3489f] transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
           </Link>
           <Link
             href="/sign-in"
-            className="text-lg text-white hover:text-pink-500"
+            className="text-lg text-white relative group overflow-hidden"
           >
-            Sign In
+            <span className="relative z-10 transition-colors duration-300 group-hover:text-[#e3489f]">
+              Sign In
+            </span>
+            <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#e3489f] transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
           </Link>
           <WalletButton />
         </div>
@@ -188,6 +246,6 @@ const Navbar = () => {
       )}
     </nav>
   );
-}
+};
 
 export default Navbar;

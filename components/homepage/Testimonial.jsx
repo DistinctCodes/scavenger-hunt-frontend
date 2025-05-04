@@ -12,6 +12,7 @@ import {
 import Image from "next/image";
 import Head from "next/head";
 import people from "../../public/images/people.png";
+import { motion, AnimatePresence } from "framer-motion";
 
 // ===== UTILITY HOOKS =====
 
@@ -68,95 +69,98 @@ const useScreenSize = () => {
 
 function TestimonialCard({ testimonial, isMobile = false }) {
   return (
-    <div className="bg-[#121727] mt-6 rounded-lg p-6 flex flex-col h-full transition-transform hover:scale-[1.02]">
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -50 }}
+      whileHover={{ scale: 1.03, transition: { duration: 0.2 } }}
+      className="bg-[#121727] mt-6 rounded-lg p-6 flex flex-col h-full"
+    >
       {isMobile ? (
-        // Mobile layout - centered with avatar at top
-        <>
-          <div className="flex relative flex-col items-center mb-4">
-            <div
-              className="w-20  border-[8px] absolute h-20 translate-y-[-80%] rounded-full flex items-center justify-center mb-3"
-              style={{
-                backgroundColor: testimonial.avatarBg,
-                borderColor: testimonial.border,
-              }}
-            >
-              <Image
-                src={testimonial.avatarUrl}
-                alt={testimonial.name}
-                width={60}
-                height={60}
-                className="rounded-full"
-              />
-            </div>
-            <div className="text-center pt-4">
-              <h4 className="font-bold text-white text-xl">
-                {testimonial.name}
-              </h4>
-              <p className="text-gray-400">{testimonial.handle}</p>
-            </div>
-          </div>
-
-          <p className="text-gray-300 mb-6 flex-1 text-center">
-            {testimonial.content}
-          </p>
-
-          <div className="flex justify-center">
-            {Array.from({ length: testimonial.rating }).map((_, i) => (
-             <svg
-             key={`${testimonial.id}-${i}`} // Unique key based on the testimonial
-             className="w-5 h-5 text-yellow-400 fill-current"
-             viewBox="0 0 24 24"
-           >
-             <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
-           </svg>
-           
-            ))}
-          </div>
-        </>
+        <motion.div layout className="flex relative flex-col items-center mb-4">
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            className="w-20 border-[8px] absolute h-20 translate-y-[-80%] rounded-full flex items-center justify-center mb-3"
+            style={{
+              backgroundColor: testimonial.avatarBg,
+              borderColor: testimonial.border,
+            }}
+          >
+            <Image
+              src={testimonial.avatarUrl}
+              alt={testimonial.name}
+              width={60}
+              height={60}
+              className="rounded-full"
+            />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-center pt-4"
+          >
+            <h4 className="font-bold text-white text-xl">{testimonial.name}</h4>
+            <p className="text-gray-400">{testimonial.handle}</p>
+          </motion.div>
+        </motion.div>
       ) : (
-        // Desktop layout - avatar on left
-        <>
-          <div className="flex flex-col items-center mb-4 relative">
-            <div
-              className="w-28 border-[8px] h-28 rounded-full flex items-center absolute translate-y-[-80%] justify-center mr-4"
-              style={{
-                backgroundColor: testimonial.avatarBg,
-                borderColor: testimonial.border,
-              }}
-            >
-              <Image
-                src={testimonial.avatarUrl}
-                alt={testimonial.name}
-                width={60}
-                height={60}
-                className="rounded-full"
-              />
-            </div>
-            <div className=" pt-10">
-              <h4 className="font-bold text-white">{testimonial.name}</h4>
-              <p className="text-gray-400">{testimonial.handle}</p>
-            </div>
+        <div className="flex flex-col items-center mb-4 relative">
+          <div
+            className="w-28 border-[8px] h-28 rounded-full flex items-center absolute translate-y-[-80%] justify-center mr-4"
+            style={{
+              backgroundColor: testimonial.avatarBg,
+              borderColor: testimonial.border,
+            }}
+          >
+            <Image
+              src={testimonial.avatarUrl}
+              alt={testimonial.name}
+              width={60}
+              height={60}
+              className="rounded-full"
+            />
           </div>
-
-          <p className="text-gray-300 mb-4 flex-1">{testimonial.content}</p>
-
-          <div className="flex justify-center">
-            {Array.from({ length: testimonial.rating }).map((_, i) => (
-              <svg
-                key={i}
-                className="w-5 h-5 text-yellow-400 fill-current"
-                viewBox="0 0 24 24"
-                aria-labelledby={`star-icon-${i}`}
-                role="img"
-              >
-                <title id={`star-icon-${i}`}>Star icon</title>
-                <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
-              </svg>
-            ))}
+          <div className="pt-10">
+            <h4 className="font-bold text-white text-center">
+              {testimonial.name}
+            </h4>
+            <p className="text-gray-400 text-center">{testimonial.handle}</p>
           </div>
-        </>
+        </div>
       )}
-    </div>
+
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="text-gray-300 mb-6 flex-1 text-center mt-4"
+      >
+        {testimonial.content}
+      </motion.p>
+
+      <motion.div
+        className="flex justify-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+      >
+        {Array.from({ length: testimonial.rating }).map((_, i) => (
+          <motion.svg
+            key={`${testimonial.id}-${i}`}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.1 * i }}
+            className="w-5 h-5 text-yellow-400 fill-current"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
+          </motion.svg>
+        ))}
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -164,59 +168,93 @@ function TestimonialCard({ testimonial, isMobile = false }) {
 
 function SocialStats() {
   const isMobile = useMobile();
+  const statsVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.2,
+        duration: 0.5,
+        type: "spring",
+        stiffness: 100,
+      },
+    }),
+  };
 
   return (
-    <div className="w-full rounded-2xl bg-gradient-to-r from-[#8A3BAF] to-[#E05FAD] p-4 md:p-6">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="w-full rounded-2xl bg-gradient-to-r from-[#8A3BAF] to-[#E05FAD] p-4 md:p-6"
+    >
       <div className="flex flex-row">
-        {/* Stats Container - Takes full width on mobile, 2/3 on desktop */}
         <div className="w-full lg:w-2/3 grid grid-cols-3 gap-2 md:gap-4">
-          {/* Facebook Stats */}
-          <div className="text-center border-r border-white/20 pr-2">
-            <div className="bg-white rounded-full w-8 h-8 md:w-12 md:h-12 flex items-center justify-center mx-auto mb-1 md:mb-3">
-              <Facebook className="h-4 w-4 md:h-6 md:w-6 text-[#8A3BAF]" />
-            </div>
-            <h3 className="text-xl md:text-4xl font-bold text-white">80K+</h3>
-            <p className="text-white/80 text-xs md:text-sm">Facebook members</p>
-          </div>
-
-          {/* Twitter Stats */}
-          <div className="text-center border-r border-white/20 pr-2">
-            <div className="bg-white rounded-full w-8 h-8 md:w-12 md:h-12 flex items-center justify-center mx-auto mb-1 md:mb-3">
-              <Twitter className="h-4 w-4 md:h-6 md:w-6 text-[#8A3BAF]" />
-            </div>
-            <h3 className="text-xl md:text-4xl font-bold text-white">150K+</h3>
-            <p className="text-white/80 text-xs md:text-sm">
-              Twitter followers
-            </p>
-          </div>
-
-          {/* LinkedIn Stats */}
-          <div className="text-center">
-            <div className="bg-white rounded-full w-8 h-8 md:w-12 md:h-12 flex items-center justify-center mx-auto mb-1 md:mb-3">
-              <Linkedin className="h-4 w-4 md:h-6 md:w-6 text-[#8A3BAF]" />
-            </div>
-            <h3 className="text-xl md:text-4xl font-bold text-white">45K+</h3>
-            <p className="text-white/80 text-xs md:text-sm">LinkedIn members</p>
-          </div>
+          {[
+            { icon: Facebook, count: "80K+", label: "Facebook members" },
+            { icon: Twitter, count: "150K+", label: "Twitter followers" },
+            { icon: Linkedin, count: "45K+", label: "LinkedIn members" },
+          ].map((stat, index) => (
+            <motion.div
+              key={index}
+              custom={index}
+              variants={statsVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="text-center border-r last:border-r-0 border-white/20 pr-2"
+            >
+              <motion.div
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                className="bg-white rounded-full w-8 h-8 md:w-12 md:h-12 flex items-center justify-center mx-auto mb-1 md:mb-3"
+              >
+                <stat.icon className="h-4 w-4 md:h-6 md:w-6 text-[#8A3BAF]" />
+              </motion.div>
+              <motion.h3
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 * index }}
+                className="text-xl md:text-4xl font-bold text-white"
+              >
+                {stat.count}
+              </motion.h3>
+              <p className="text-white/80 text-xs md:text-sm">{stat.label}</p>
+            </motion.div>
+          ))}
         </div>
 
-        {/* Illustration Container - Only on desktop/tablet */}
         {!isMobile && (
-          <div className=" hidden lg:block md:w-1/3 relative">
-            <div className="">
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
+            className="hidden lg:block md:w-1/3 relative"
+          >
+            <motion.div
+              animate={{
+                y: [0, -10, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
               <Image
                 src={people}
                 alt="Community illustration"
                 width={300}
                 height={150}
                 priority
-                className=" w-[200px] xl:w-[300px] absolute -bottom-5 left-16 xl:left-10"
+                className="w-[200px] xl:w-[300px] absolute -bottom-5 left-16 xl:left-10"
               />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
