@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import Lottie from "lottie-react";
+import questionAnimation from "../../public/animation/question.json";
 
 const FAQItem = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -76,29 +78,44 @@ function FAQ() {
         "Once your order ships, you'll receive a tracking number via email that you can use to monitor your package's delivery status.",
     },
   ];
+
   return (
     <div className="grid grid-cols-2 gap-[54px] w-[95%] lg:w-10/12 mx-auto bg-">
       <div className="lg:w-[561px] col-span-2 lg:col-span-1">
-        <h1 className="text-[#e9e9e9] font-orbitron text-2xl text-center lg:text-left lg:text-[32px]">
-          Frequently asked questions
-          <span className="bg-gradient-to-r text-transparent bg-clip-text from-[#7D3EAF] to-[#E7499F] block">
-            about Scavengerhunt
-          </span>
-        </h1>
-        <p className="text-center lg:text-left mt-[26px] lg:mt-4 text-[#858894] font-spaceGrotesk">
-          Can’t find the answers you are looking for?{" "}
-          <span className="block text-white lg:inline-block">
-            Reach out on our{" "}
-            <a
-              href="http://"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline"
-            >
-              Discord
-            </a>
-          </span>
-        </p>
+        <div className="flex flex-col items-center gap-6">
+          <div>
+            <h1 className="text-[#e9e9e9] font-orbitron text-2xl text-center lg:text-left lg:text-[32px]">
+              Frequently asked questions
+              <span className="bg-gradient-to-r text-transparent bg-clip-text from-[#7D3EAF] to-[#E7499F] block">
+                about Scavengerhunt
+              </span>
+            </h1>
+            <p className="text-center lg:text-left mt-[26px] lg:mt-4 text-[#858894] font-spaceGrotesk">
+              Can&apos;t find the answers you are looking for?{" "}
+              <span className="text-white lg:inline-block">
+                <span className="flex items-center gap-2">
+                  Reach out on our{" "}
+                  <a
+                    href="http://"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline"
+                  >
+                    Discord
+                  </a>
+                </span>
+              </span>
+            </p>
+          </div>
+          <div className="w-64 h-64 mt-4">
+            <Lottie
+              animationData={questionAnimation}
+              loop={true}
+              autoplay={true}
+              style={{ width: "100%", height: "100%" }}
+            />
+          </div>
+        </div>
       </div>
       <div className="col-span-2 space-y-5 lg:col-span-1">
         {faqData.map((faq, index) => (
