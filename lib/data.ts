@@ -15,6 +15,28 @@ import image1 from "@/public/images/futuristic-dj-using-virtual-reality-glasses-
 import StarknetLogo from "@/public/ecosystems/Starknet_Symbol.png";
 import WorldcoinLogo from "@/public/ecosystems/Worldcoin_Symbol.png";
 
+
+const dummyNFTs = [
+  {
+    name: "Nova Echo",
+    number: "01234",
+    floor: "1.99ETH",
+    image: "/images/nova.png"
+  },
+  {
+    name: "Apex Eon",
+    number: "01234",
+    floor: "1.99ETH",
+    image: "/images/apex.png"
+  },
+  {
+    name: "Alpha Neon",
+    number: "01234",
+    floor: "1.99ETH",
+    image: "/images/alpha.png"
+  },
+];
+
 export const userProfile: User = {
 	id: "#2355414",
 	name: "Jendor Glowe",
@@ -25,6 +47,7 @@ export const userProfile: User = {
 		nftCollected: "0",
 		ecoSystem: "0",
 	},
+	earnedNFTs: dummyNFTs
 };
 
 export const onboardingSteps: OnboardingStep[] = [
@@ -155,3 +178,5 @@ export const myEcosystems : ecosystems[] = [
 		difficulty: "Medium",
 	},
 ];
+
+

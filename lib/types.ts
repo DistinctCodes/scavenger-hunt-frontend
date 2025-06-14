@@ -20,6 +20,12 @@ export interface User {
 		nftCollected: string | number;
 		ecoSystem: string | number;
 	};
+	earnedNFTs?: {
+    name: string;
+    number: string;
+    floor: string;
+    image: string;
+  }[];
 }
 
 export interface OnboardingStep {

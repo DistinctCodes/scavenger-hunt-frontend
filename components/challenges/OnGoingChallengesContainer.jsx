@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,34 +12,45 @@ const OnGoingChallenges = ({
   ecosystem,
   level,
 }) => {
+  // Fixed: Add null checks before calling toLowerCase()
   const getStatusBorderColor = (status) => {
-    if (status.toLowerCase() === "upcoming") return "border-[#FFB82E]"; // Green
-    if (status.toLowerCase() === "active") return "border-[#439F6E]"; // Yellow
-    return "border-gray-400"; // Default
+    if (!status) return "border-gray-400"; // Handle null/undefined
+    if (status.toLowerCase() === "upcoming") return "border-[#FFB82E]";
+    if (status.toLowerCase() === "active") return "border-[#439F6E]";
+    return "border-gray-400";
   };
+
   const getStatusBackgroundColor = (status) => {
-    if (status.toLowerCase() === "upcoming") return "bg-[#FFB82E]"; // Green
-    if (status.toLowerCase() === "active") return "bg-[#439F6E]"; // Yellow
-    return "bg-gray-400"; // Default
+    if (!status) return "bg-gray-400"; // Handle null/undefined
+    if (status.toLowerCase() === "upcoming") return "bg-[#FFB82E]";
+    if (status.toLowerCase() === "active") return "bg-[#439F6E]";
+    return "bg-gray-400";
   };
-  const getLevelBorderColor = (status) => {
-    if (status.toLowerCase() === "easy") return "border-[#439F6E]"; // Yellow
-    if (status.toLowerCase() === "medium") return "border-[#FFB82E]"; // Green
-    if (status.toLowerCase() === "hard") return "border-[#F93232]"; // Yellow
-    return "border-gray-400"; // Default
+
+  const getLevelBorderColor = (level) => {
+    if (!level) return "border-gray-400"; // Handle null/undefined
+    if (level.toLowerCase() === "easy") return "border-[#439F6E]";
+    if (level.toLowerCase() === "medium") return "border-[#FFB82E]";
+    if (level.toLowerCase() === "hard") return "border-[#F93232]";
+    return "border-gray-400";
   };
-  const getLevelBackgroundColor = (status) => {
-    if (status.toLowerCase() === "easy") return "bg-[#C0ECD4]";
-    if (status.toLowerCase() === "medium") return "bg-[#FFEAC1]";
-    if (status.toLowerCase() === "hard") return "bg-[#FFD8D8]";
-    return "bg-gray-400"; // Default
+
+  const getLevelBackgroundColor = (level) => {
+    if (!level) return "bg-gray-400"; // Handle null/undefined
+    if (level.toLowerCase() === "easy") return "bg-[#C0ECD4]";
+    if (level.toLowerCase() === "medium") return "bg-[#FFEAC1]";
+    if (level.toLowerCase() === "hard") return "bg-[#FFD8D8]";
+    return "bg-gray-400";
   };
-  const getLevelTextColor = (status) => {
-    if (status.toLowerCase() === "easy") return "text-[#439F6E]";
-    if (status.toLowerCase() === "medium") return "text-[#FFB82E]";
-    if (status.toLowerCase() === "hard") return "text-[#F93232]";
-    return "bg-gray-400"; // Default
+
+  const getLevelTextColor = (level) => {
+    if (!level) return "text-gray-400"; // Handle null/undefined
+    if (level.toLowerCase() === "easy") return "text-[#439F6E]";
+    if (level.toLowerCase() === "medium") return "text-[#FFB82E]";
+    if (level.toLowerCase() === "hard") return "text-[#F93232]";
+    return "text-gray-400"; // Fixed: was "bg-gray-400"
   };
+
   return (
     <article className="w-full md:w-[236px] md:h-[248px] h-[323px] rounded-[10px] overflow-hidden relative bg-pink-600 transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg cursor-pointer">
       <div className="relative w-full h-full rounded">
@@ -65,7 +75,7 @@ const OnGoingChallenges = ({
                 )} `}
               />
               <p className="text-[10px] font-bold text-white capitalize ">
-                {status}
+                {status || "Unknown"}
               </p>
             </div>
             <div
@@ -80,7 +90,7 @@ const OnGoingChallenges = ({
                   level
                 )}`}
               >
-                {level}
+                {level || "Unknown"}
               </p>
             </div>
           </header>
@@ -166,4 +176,3 @@ const OnGoingChallenges = ({
 };
 
 export default OnGoingChallenges;
-
